@@ -4,6 +4,7 @@ import './App.css';
 import './search.svg';
 import searchIcon from './search.svg'; 
 import MovieCard from "./MovieCard";
+import { appInsights } from './appinsight.js'; 
 
 const API_URL = 'http://www.omdbapi.com/?i=tt3896198&apikey=ddf7363d'
 
@@ -26,6 +27,7 @@ const App = () => {
    }
    useEffect( () => {
     searchMovies("Disney");
+    appInsights.trackPageView({ name: 'App' });
    },[]); //only want to call after start 
 
     return (
