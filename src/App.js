@@ -5,6 +5,7 @@ import './search.svg';
 import searchIcon from './search.svg'; 
 import MovieCard from "./MovieCard";
 import { appInsights } from './appinsight.js'; 
+import SignInForm from "./signInForm.jsx";
 
 const API_URL = 'http://www.omdbapi.com/?i=tt3896198&apikey=ddf7363d'
 
@@ -12,6 +13,7 @@ const App = () => {
 
   const[searchTerm,setSearchTerm] =useState();
   const[movies,setMovies] = useState([]);
+  const [showSignInForm, setShowSignIn] = useState(false); //toggle signinform 
 
   const searchMovies = async (title) => {
       const response = await fetch(`${API_URL}&s=${title}`);
@@ -26,12 +28,20 @@ const App = () => {
     }
    }
    useEffect( () => {
-    searchMovies("Disney");
+    searchMovies("Mission");
     appInsights.trackPageView({ name: 'App' });
    },[]); //only want to call after start 
 
+   const handleSignInClick = () => {
+    setShowSignIn(true); // Show the sign-in form when the "Sign In" button is clicked
+  }
+
     return (
         <div className="app">
+
+            {/* Sign-in button */}
+            <button className="signin-button" onClick={handleSignInClick}>Sign In</button>
+
             <h1>Cinematic Search</h1>
             <div className="search">
                <input
@@ -43,6 +53,8 @@ const App = () => {
                <img src={searchIcon} alt="search icon" onClick={() => {searchMovies(searchTerm)}}/>
             </div>
 
+            
+             
             {movies?.length > 0 ?
               (<div className="container">
                 {
@@ -53,7 +65,13 @@ const App = () => {
             :( <div className="empty">
                <h2>No movies found</h2>
                </div>
-             )}     
+             )}   
+
+            {/* Conditionally render the sign-in form */}
+             {showSignInForm &&  
+               <SignInForm onClose={() => setShowSignIn(false)} />
+             }
+  
         </div>
         
     );
