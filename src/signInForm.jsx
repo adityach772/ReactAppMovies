@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './signInForm.css';
 
-const SignInForm = ({ onClose }) => {
+const SignInForm = ({ handleLoginStatus, onClose }) => {
   const [unameOrEmail, setUnameOrEmail] = useState('');
   const [passwrd, setPassword] = useState('');
 
@@ -17,11 +17,13 @@ const SignInForm = ({ onClose }) => {
         },
         body: JSON.stringify({ uname: unameOrEmail, email: unameOrEmail, passwrd }), // Send both uname and email
       });
-
+      console.log("success1");
       if (response.ok) {
         // If the response is successful, do whatever you need to do after signing in
         // For example, you can close the sign-in form
-        onClose();
+         handleLoginStatus("true"); //sending login is succesfull 
+         onClose(true) //for closing form
+
         // Optionally, you can reload the page or perform any other action
       } else {
         // If there's an error, handle it accordingly

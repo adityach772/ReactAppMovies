@@ -6,6 +6,7 @@ import searchIcon from './search.svg';
 import MovieCard from "./MovieCard";
 import { appInsights } from './appinsight.js'; 
 import SignInForm from "./signInForm.jsx";
+import FavoritesButton  from "./favoritesButton.jsx";
 
 const API_URL = 'http://www.omdbapi.com/?i=tt3896198&apikey=ddf7363d'
 
@@ -14,6 +15,10 @@ const App = () => {
   const[searchTerm,setSearchTerm] =useState();
   const[movies,setMovies] = useState([]);
   const [showSignInForm, setShowSignIn] = useState(false); //toggle signinform 
+  const [showFavoritesButton,setFavoritesButton] = useState(false);
+  const [showSignButton,setSignInButton] = useState(true);
+  
+
 
   const searchMovies = async (title) => {
       const response = await fetch(`${API_URL}&s=${title}`);
@@ -36,11 +41,24 @@ const App = () => {
     setShowSignIn(true); // Show the sign-in form when the "Sign In" button is clicked
   }
 
+  //getting success status from signin form
+  const handleLoginStatus = (status) => {
+     console.log("Login Status",status);
+     setFavoritesButton(true);
+     setSignInButton(false);
+  };
+
+
+    
     return (
         <div className="app">
 
             {/* Sign-in button */}
-            <button className="signin-button" onClick={handleSignInClick}>Sign In</button>
+            {
+               showSignButton &&  <button className="signin-button" onClick={handleSignInClick}>Sign In</button>
+            }
+            
+
 
             <h1>Cinematic Search</h1>
             <div className="search">
@@ -67,9 +85,14 @@ const App = () => {
                </div>
              )}   
 
+           
             {/* Conditionally render the sign-in form */}
              {showSignInForm &&  
-               <SignInForm onClose={() => setShowSignIn(false)} />
+               <SignInForm  onClose={() => setShowSignIn(false)  } handleLoginStatus={handleLoginStatus} />
+             }
+
+             {
+                showFavoritesButton && <button  className="favorites-button" FavoritesButton > Favorites </button>
              }
   
         </div>
