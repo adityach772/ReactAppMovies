@@ -6,6 +6,7 @@ import searchIcon from './search.svg';
 import MovieCard from "./MovieCard";
 import { appInsights } from './appinsight.js'; 
 import SignInForm from "./signInForm.jsx";
+import ManageFavorites from "./manageFavorites.js";
 import FavoritesButton  from "./favoritesButton.jsx";
 
 const API_URL = 'http://www.omdbapi.com/?i=tt3896198&apikey=ddf7363d'
@@ -17,6 +18,7 @@ const App = () => {
   const [showSignInForm, setShowSignIn] = useState(false); //toggle signinform 
   const [showFavoritesButton,setFavoritesButton] = useState(false);
   const [showSignButton,setSignInButton] = useState(true);
+  const [showFavorites, setShowFavorites] = useState(false);
   
 
 
@@ -32,6 +34,7 @@ const App = () => {
         searchMovies(searchTerm);
     }
    }
+
    useEffect( () => {
     searchMovies("Mission");
     appInsights.trackPageView({ name: 'App' });
@@ -45,12 +48,19 @@ const App = () => {
   const handleLoginStatus = (status) => {
      console.log("Login Status",status);
      setFavoritesButton(true);
-     setSignInButton(false);
+      setSignInButton(false);
+  };
+
+  const handleFavoritesClick = () => {
+    setShowFavorites(true); 
   };
 
 
-    
+
+     if(!showFavorites)
+    {
     return (
+      
         <div className="app">
 
             {/* Sign-in button */}
@@ -91,13 +101,22 @@ const App = () => {
                <SignInForm  onClose={() => setShowSignIn(false)  } handleLoginStatus={handleLoginStatus} />
              }
 
+             
              {
-                showFavoritesButton && <button  className="favorites-button" FavoritesButton > Favorites </button>
+                showFavoritesButton && <button  className="favorites-button" FavoritesButton onClick={handleFavoritesClick}> Favorites </button>   
              }
+                       
+
+       
+
   
         </div>
         
-    );
+        );
+       }
+        else{
+                 return <ManageFavorites/>
+            }
 }
 
 export default App;
